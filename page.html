@@ -1,0 +1,714 @@
+
+	<script>
+/*
+var curx = 16;
+var cury = 16;
+
+var centerX = 24;
+var centerY = 24;
+*/
+
+var currentX = 24;
+var currentY = 24;
+
+var ghostCurrentX = ;
+var ghostCurrentY = ;
+
+var ghosterTargetTile = []
+
+var allowedSquares = [];
+/*var pacmanImages = [new Image(),new Image(),new Image(),new Image(), new Image()];
+["/home/anubhav/pacman/initial.svg","/home/anubhav/pacman/open-60.svg","/home/anubhav/pacman/open-45.svg","/home/anubhav/pacman/open-30.svg", /
+"/home/anubhav/pacman/open-15.svg"].foreach (/
+	function (element,index) {
+				pacmanImages[index].src = element;
+	});
+*/
+var ghostImg = new Image();
+ghostImg.src = "/home/anubhav/pacman/open-30.svg";
+var currentDirection = "";
+var pendingDirection = "Down";
+//animatePacman.counter = 0;
+/*function animatePacman() {
+	switch (animatePacman.counter) {
+
+	}
+}*/
+
+function gameLoop() {
+
+	if (isArrayInArray(allowedSquares,[currentX,currentY],2)!=-1)
+	{
+		switch(currentDirection) {
+			case "Left":
+				if (isArrayInArray(allowedSquares,[currentX - 16 ,currentY],2)==-1) {
+					currentDirection = "";
+				}
+				break;
+			case "Right":
+				if (isArrayInArray(allowedSquares,[currentX + 16 ,currentY],2)==-1) {
+						currentDirection = "";
+				}
+				break;
+			case "Up":
+				if (isArrayInArray(allowedSquares,[currentX,currentY - 16],2)==-1) {
+					currentDirection = "";
+				}
+				break;
+			case "Down":
+				if (isArrayInArray(allowedSquares,[currentX,currentY + 16],2)==-1) {
+					currentDirection = "";
+				}
+		}
+		switch(pendingDirection) {
+			case "Left":
+				if (isArrayInArray(allowedSquares,[currentX - 16 ,currentY],2)!=-1) {
+					currentDirection = pendingDirection;
+					pendingDirection = "";
+				}
+				break;
+			case "Right":
+				if (isArrayInArray(allowedSquares,[currentX + 16 ,currentY],2)!=-1) {
+					currentDirection = pendingDirection;
+					pendingDirection = "";
+				}
+				break;
+			case "Up":
+				if (isArrayInArray(allowedSquares,[currentX,currentY - 16],2)!=-1) {
+					currentDirection = pendingDirection;
+					pendingDirection = "";
+				}
+				break;
+			case "Down":
+				if (isArrayInArray(allowedSquares,[currentX,currentY + 16],2)!=-1) {
+					currentDirection = pendingDirection;
+					pendingDirection = "";
+				}
+		}
+	}
+	console.log(" currentDirection = " + currentDirection + " pendingDirection = " + pendingDirection);
+	switch(currentDirection) {
+		case "Left":
+				left();
+				break;
+		case "Right":
+				right();
+				break;
+		case "Up":
+				up();
+				break;
+		case "Down":
+				down();
+	}
+	/*
+	if (keyPressed.indexOf("ArrowLeft")!=-1)
+		left();
+	if (keyPressed.indexOf("ArrowRight")!=-1)
+		right();
+	if (keyPressed.indexOf("ArrowDown")!=-1)
+		down();
+	if (keyPressed.indexOf("ArrowUp")!=-1)
+		up();
+*/
+}
+
+function drawBoard(context) {
+	// adding text filled text
+	//context.font = "15px Consolas";
+	//context.fillStyle="blue";
+	//context.fillText("Anubhav",100,100);
+
+	context.strokeStyle="blue";
+	var qct = function(cpx,cpy,epx,epy) {
+		context.quadraticCurveTo(cpx,cpy,epx,epy);
+	}
+	var lt = function (x,y) {
+		context.lineTo(x,y);
+	}
+	var mt = function (x,y) {
+		context.moveTo(x,y);
+	}
+
+	// drawing board for pacman
+	context.fillStyle="#000000";
+	context.fillRect(0,0,450,500);
+
+	context.scale(2,2);
+	context.beginPath();
+	context.strokeStyle="blue";
+
+	mt(0,108);
+	lt(41,108);
+	qct(42,107,43,106);
+	lt(43,79);
+	qct(42,78,41,77);
+	lt(5,77);
+	qct(4,76,3,75);
+	lt(3,6);
+	qct(4,5,5,4);
+	lt(106,4);
+	qct(107,5,108,6);
+	lt(108,34);
+	qct(109,35,110,36);
+	lt(113,36);
+	qct(114,35,115,34);
+	lt(115,6);
+	qct(116,5,117,4);
+	lt(218,4);
+	qct(219,5,220,6);
+	lt(220,75);
+	qct(219,76,218,77);
+	lt(182,77);
+	qct(181,78,180,79);
+	lt(180,106);
+	qct(181,107,182,108);
+	lt(223,108);
+
+
+	mt(223,125);
+	lt(182,125);
+	qct(181,126,180,127);
+	lt(180,154);
+	qct(181,155,182,156);
+	lt(218,156);
+	qct(219,157,220,158);
+	lt(220,195);
+	qct(219,196,218,197);
+	lt(206,197);
+	qct(205,198,204,199);
+	lt(204,202);
+	qct(205,203,206,204);
+	lt(218,204);
+	qct(219,205,220,206);
+	lt(220,243);
+	qct(219,244,218,245);
+	lt(5,245);
+	qct(4,244,3,243);
+	lt(3,206);
+	qct(4,205,5,204);
+	lt(17,204);
+	qct(18,203,19,202);
+	lt(19,199);
+	qct(18,198,17,197);
+	lt(5,197);
+	qct(4,196,3,195);
+	lt(3,158);
+	qct(4,157,5,156);
+	lt(41,156);
+	qct(42,155,43,154);
+	lt(43,127);
+	qct(42,126,41,125);
+	lt(0,125);
+
+	// new line
+	mt(0,105);
+	lt(39,105);
+	qct(40,105,40,104);
+	lt(40,81);
+	qct(40,80,39,80);
+	lt(4,80);
+	qct(1,79,0,76);
+	lt(0,5);
+	qct(1,2,4,1);
+	lt(219,1);
+	qct(222,2,223,5);
+	lt(223,76);
+	qct(222,79,219,80);
+	lt(184,80);
+	qct(183,80,183,81);
+	lt(183,104);
+	qct(183,105,184,105);
+	lt(223,105);
+
+	// new line
+	mt(223,128);
+	lt(184,128);
+	qct(183,128,183,129);
+	lt(183,152);
+	qct(183,153,184,153);
+	lt(219,153);
+	qct(222,154,223,157);
+	lt(223,244);
+	qct(222,247,219,248);
+	lt(4,248);
+	qct(1,247,0,244);
+	lt(0,157);
+	qct(1,154,4,153);
+	lt(39,153);
+	qct(40,153,40,152);
+	lt(40,129);
+	qct(40,128,39,128);
+	lt(0,128);
+
+	context.stroke();
+
+/*
+	context.beginPath();
+	context.strokeStyle="red";
+
+	for (i=0;i<=250;i=i+8){
+	context.moveTo(0,i);
+	context.lineTo(225,i);
+	}
+
+	for (i=0;i<=225;i=i+8){
+	context.moveTo(i,0);
+	context.lineTo(i,250);
+	}
+	context.stroke();
+*/
+	// drawing squares
+	context.strokeStyle="blue";
+	context.beginPath();
+	mt(20,23);
+	qct(21,22,22,21);
+	lt(41,21);
+	qct(42,22,43,23);
+	lt(43,34);
+	qct(42,35,41,36);
+	lt(22,36);
+	qct(21,35,20,34);
+	lt(20,23);
+
+	mt(60,23);
+	qct(61,22,62,21);
+	lt(89,21);
+	qct(90,22,91,23);
+	lt(91,34);
+	qct(90,35,89,36);
+	lt(62,36);
+	qct(61,35,60,34);
+	lt(60,23);
+
+	mt(132,23);
+	qct(133,22,134,21);
+	lt(161,21);
+	qct(162,22,163,23);
+	lt(163,34);
+	qct(162,35,161,36);
+	lt(134,36);
+	qct(133,35,132,34);
+	lt(132,23);
+
+	mt(180,23);
+	qct(181,22,182,21);
+	lt(201,21);
+	qct(202,22,203,23);
+	lt(203,34);
+	qct(202,35,201,36);
+	lt(182,36);
+	qct(181,35,180,34);
+	lt(180,23);
+
+	mt(20,55);
+	qct(21,54,22,53);
+	lt(41,53);
+	qct(42,54,43,55);
+	lt(43,58);
+	qct(42,59,41,60);
+	lt(22,60);
+	qct(21,59,20,58);
+	lt(20,55);
+
+	mt(180,55);
+	qct(181,54,182,53);
+	lt(201,53);
+	qct(202,54,203,55);
+	lt(203,58);
+	qct(202,59,201,60);
+	lt(182,60);
+	qct(181,59,180,58);
+	lt(180,55);
+
+	// ghosts house
+	mt(84,101);
+	lt(103,101);
+	lt(103,104);
+	lt(87,104);
+	lt(87,129);
+	lt(136,129);
+	lt(136,104);
+	lt(120,104);
+	lt(120,101);
+	lt(139,101);
+	lt(139,132);
+	lt(84,132);
+	lt(84,101);
+
+	mt(60,55);
+	lt(62,53);
+	lt(65,53);
+	lt(67,55);
+	lt(67,75);
+	lt(69,77);
+	lt(89,77);
+	lt(91,79);
+	lt(91,82);
+	lt(89,84);
+	lt(69,84);
+	lt(67,86);
+	lt(67,106);
+	lt(65,108);
+	lt(62,108);
+	lt(60,106);
+	lt(60,55);
+
+	mt(84,55);
+	lt(86,53);
+	lt(137,53);
+	lt(139,55);
+	lt(139,58);
+	lt(137,60);
+	lt(117,60);
+	lt(115,62);
+	lt(115,82);
+	lt(113,84);
+	lt(110,84);
+	lt(108,82);
+	lt(108,62);
+	lt(106,60);
+	lt(86,60);
+	lt(84,58);
+	lt(84,55);
+
+	mt(60,127);
+	lt(62,125);
+	lt(65,125);
+	lt(67,127);
+	lt(67,154);
+	lt(65,156);
+	lt(62,156);
+	lt(60,154);
+	lt(60,127);
+
+	mt(156,127);
+	lt(158,125);
+	lt(161,125);
+	lt(163,127);
+	lt(163,154);
+	lt(161,156);
+	lt(158,156);
+	lt(156,154);
+	lt(156,127);
+
+	mt(156,55);
+	lt(158,53);
+	lt(161,53);
+	lt(163,55);
+	lt(163,106);
+	lt(161,108);
+	lt(158,108);
+	lt(156,106);
+	lt(156,86);
+	lt(154,84);
+	lt(134,84);
+	lt(132,82);
+	lt(132,79);
+	lt(134,77);
+	lt(154,77);
+	lt(156,75);
+	lt(156,55);
+
+	mt(86,149);
+	lt(84,151);
+	lt(84,154);
+	lt(86,156);
+	lt(106,156);
+	lt(108,158);
+	lt(108,178);
+	lt(110,180);
+	lt(113,180);
+	lt(115,178);
+	lt(115,158);
+	lt(117,156);
+	lt(137,156);
+	lt(139,154);
+	lt(139,151);
+	lt(137,149);
+	lt(86,149);
+
+
+	mt(86,197);
+	lt(84,199);
+	lt(84,202);
+	lt(86,204);
+	lt(106,204);
+	lt(108,206);
+	lt(108,226);
+	lt(110,228);
+	lt(113,228);
+	lt(115,226);
+	lt(115,206);
+	lt(117,204);
+	lt(137,204);
+	lt(139,202);
+	lt(139,199);
+	lt(137,197);
+	lt(86,197);
+
+	mt(62,173);
+	points = [[89,173],[91,175],[91,178],[89,180],[62,180],[60,178],[60,175],[62,173]];
+	for (i=0;i<points.length;i++)
+		lt(points[i][0],points[i][1]);
+
+
+	mt(134,173);
+	for (i=0;i<points.length;i++)
+		lt(points[i][0] + 134 - 62,points[i][1]);
+
+	mt(22,173);
+	points = [[41,173],[43,175],[43,202],[41,204],[38,204],[36,202],[36,182],[34,180],[22,180],[20,178],[20,175],[22,173]];
+	for (i=0;i<points.length;i++)
+		lt(points[i][0],points[i][1]);
+
+
+	mt(201,173);
+	for (i=0;i<points.length;i++)
+		lt(223 - points[i][0],points[i][1]);
+
+	mt(22,221);
+	points = [[58,221],[60,219],[60,199],[62,197],[65,197],[67,199],[67,219],[69,221],[89,221],[91,223],[91,226],[89,228],[22,228],[20,226],[20,223],[22,221]];
+	for (i=0;i<points.length;i++)
+		lt(points[i][0],points[i][1]);
+
+	mt(201,221);
+	for (i=0;i<points.length;i++)
+		lt(223 - points[i][0],points[i][1]);
+
+
+
+	context.stroke();
+	context.closePath();
+
+	context.scale(0.5,0.5);
+}
+
+function isArrayInArray(array , eArray, nElements ) {
+	// change it to binary search later
+	for (i=0;i<array.length;i++) {
+		allMatched = 1;
+		for (j=0;j<nElements;j++)
+				if (array[i][j]!=eArray[j]) {
+					allMatched = 0;
+					break;
+				}
+		if (allMatched)
+			return i;
+	}
+	return -1;
+}
+
+function isArraysEqual(a,b,n) {
+	for (var j=0;j<n;j++) {
+		if (a[j]!=b[j])
+			return 0;
+	}
+	return 1;
+}
+
+function getCharacterCurrentSquare(_cx,_cy) {
+	return [ parseInt(_cx/16) * 16 + 8 , parseInt(_cy/16) * 16  + 8];
+}
+
+function move(chgInX=0,chgInY=0) {
+	var canvas = document.getElementById("mainCanvas");
+	var context = canvas.getContext("2d");
+	context.clearRect(0,0,450,500);
+	drawBoard(context);
+	context.beginPath();
+
+		context.strokeStyle="red";
+
+		for (i=0;i<=500;i=i+16){
+		context.moveTo(0,i);
+		context.lineTo(450,i);
+		}
+
+		for (i=0;i<=450;i=i+16){
+		context.moveTo(i,0);
+		context.lineTo(i,500);
+		}
+		context.stroke();
+
+	context.beginPath();
+	context.fillStyle = "white";
+	currentX = currentX + chgInX;
+	currentY = currentY + chgInY;
+	context.drawImage(ghostImg, currentX-12,currentY-12,24,24);
+	context.strokeStyle = "white";
+	context.strokeRect(currentX-1,currentY-1,24,24);
+	context.stroke();
+	console.log(" X = " + currentX + " Y = " + currentY);
+
+}
+/*else {
+	center = getCharacterCurrentSquare(currentX,currentY)
+	pendingDirnPossible = false;
+	switch(pendingKey){
+		case "ArrowLeft":
+			if (isArrayInArray(allowedSquares,[currentX-16,currentY],2)!=-1)
+					pendingDirnPossible = true;
+				break;
+		case "ArrowRight":
+			if (isArrayInArray(allowedSquares,[currentX+16,currentY],2)!=-1)
+				pendingDirnPossible = true;
+				break;
+		case "ArrowUp":
+			if (isArrayInArray(allowedSquares,[currentX,currentY-16],2)!=-1)
+				pendingDirnPossible = true;
+				break;
+		case "ArrowDown":
+			if (isArrayInArray(allowedSquares,[currentX,currentY+16],2)!=-1)
+				pendingDirnPossible = true;
+	}
+	if (pendingDirnPossible)
+	{
+		currentKey = pendingKey;
+	}*/
+//}*/
+/*var s = getCharacterCurrentSquare(centerX,centerY);
+	console.log(s);
+	if (isArraysEqual( getCharacterCurrentSquare(centerX + chgInX/2,centerY + chgInY/2) , s , 2) || isArrayInArray(allowedSquares,[s[0] + chgInX, s[1] + chgInY],2)!=-1)
+		{
+			var canvas = document.getElementById("mainCanvas");
+			var context = canvas.getContext("2d");
+			context.clearRect(0,0,450,500);
+			drawBoard(context);
+			context.beginPath();
+
+				context.strokeStyle="red";
+
+				for (i=0;i<=500;i=i+16){
+				context.moveTo(0,i);
+				context.lineTo(450,i);
+				}
+
+				for (i=0;i<=450;i=i+16){
+				context.moveTo(i,0);
+				context.lineTo(i,500);
+				}
+				context.stroke();
+
+			context.beginPath();
+			context.fillStyle = "white";
+			centerX = centerX + _cx;
+			centerY = centerY + _cy;
+			context.drawImage(ghostImg, centerX-12,centerY-12,24,24);
+			context.strokeStyle = "white";
+			context.strokeRect(centerX-1,centerY-1,24,24);
+			context.stroke();
+			console.log(" X = " + curx + " Y = " + cury)
+		}
+}*/
+
+function left() {
+	move(-2,0);
+}
+function right() {
+	move(2,0);
+}
+function down() {
+	move(0,2);
+}
+function up() {
+	move(0,-2);
+}
+
+function keyDown(e) {
+	if (!e.repeat && ( ["ArrowLeft", "ArrowRight", "ArrowUp" , "ArrowDown"].indexOf(e.key)!=-1) ) {
+		var direction = e.key.slice(5,e.key.length);
+		if (currentDirection==="") {
+				console.log(" currentDirection = " + currentDirection + " pendingDirection = " + pendingDirection);
+			currentDirection = direction;
+			return;
+		}
+		var l = [["Up","Down"],["Down","Up"],["Left","Right"],["Right","Left"]]
+		for (var i=0;i<l.length;i++){
+			if (l[i][0]==direction && l[i][1]==currentDirection) {
+				currentDirection = direction;
+			console.log(" currentDirection = " + currentDirection + " pendingDirection = " + pendingDirection);
+				return;
+			}
+		}
+	console.log(" currentDirection = " + currentDirection + " pendingDirection = " + pendingDirection);
+		pendingDirection = direction;
+		/*if ((currentKey=="ArrowUp" && e.key=="ArrowDown") || (currentKey=="ArrowDown" && e.key=="ArrowUp")) {
+			currentKey = e.key;
+		}
+		keyPressed.push(e.key);*/
+		console.log(direction);
+	}
+}
+/*
+function keyUp(e) {
+	if (["ArrowLeft", "ArrowRight", "ArrowUp" , "ArrowDown"].indexOf(e.key)!=-1) {
+		keyPressed.splice(keyPressed.indexOf(e.key))
+	}
+	console.log(keyPressed);
+}
+*/
+window.onload = function() {
+			var canvas = document.getElementById("mainCanvas");
+			var context = canvas.getContext("2d");
+
+			window.addEventListener("keydown", keyDown);
+			//window.addEventListener("keyup", keyUp );
+			drawBoard(context);
+
+			// we have squares of 8 x 8 ...  so
+
+
+			var idx = 0;
+
+			for (i=0;i<=450;i+=16)
+			{
+				for (j=0;j<=500;j+=16)
+				{
+					isAllowedSquare = 1;
+					var data = context.getImageData(i,j,16,16).data;
+					//console.log(data);
+					for (m=0;m<data.length;m+=4)
+					{	//console.log(data[m] + " " + data[m+1] + " " + data[m+2] + " \n");
+						if (data[m] != 0 || data[m+1] != 0 || data[m+2] != 0 )
+						{
+							isAllowedSquare = 0;
+							break;
+						}
+					}
+					if (isAllowedSquare==1)
+					{
+						//console.log((i + 8) + "," + (j + 8) + "  is allowed \n");
+						allowedSquares.push([i + 8, j + 8 ]);
+					//	context.scale(1,1);
+						//context.fillStyle="red";
+						//context.fillRect(i,j,16,16);
+					}
+				}
+			}
+
+			//console.log(allowedSquares.forEach(function (x){ console.log(x[0] + " " + x[1]); }));
+			context.beginPath();
+			context.fillStyle = "white";
+			context.fillRect(currentX,currentY,16,16);
+			context.stroke();
+					context.beginPath();
+
+						context.strokeStyle="red";
+
+						for (i=0;i<=500;i=i+16){
+						context.moveTo(0,i);
+						context.lineTo(450,i);
+						}
+
+						for (i=0;i<=450;i=i+16){
+						context.moveTo(i,0);
+						context.lineTo(i,500);
+						}
+						context.stroke();
+
+
+		window.setInterval(gameLoop,1000/50);
+
+
+		}
+	</script>
