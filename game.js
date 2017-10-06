@@ -463,7 +463,7 @@ var USER =  (function () {
   var animationState = 0;
 
   var pacmanInitialImage = new Image ();
-  pacmanInitialImage.src = "/home/anubhav/pacman/initial.svg";
+  pacmanInitialImage.src = "./img/pacman/initial.svg";
   var pacmanMovingImages = [];
 
 var loadPacmanImages = function () {
@@ -472,8 +472,8 @@ var loadPacmanImages = function () {
     [ new Image(),new Image(),new Image(),new Image],  // right
     [ new Image(),new Image(),new Image(),new Image],  // up
     [ new Image(),new Image(),new Image(),new Image] ]; // down
-  ['/home/anubhav/pacman/direction/open-60.svg', '/home/anubhav/pacman/direction/open-45.svg',
-   '/home/anubhav/pacman/direction/open-30.svg', '/home/anubhav/pacman/direction/open-15.svg'].forEach( function  (element , index) {
+  ['./img/pacman/direction/open-60.svg', './img/pacman/direction/open-45.svg',
+   './img/pacman/direction/open-30.svg', './img/pacman/direction/open-15.svg'].forEach( function  (element , index) {
      ['left','right','up','down'].forEach( function(e,i) {
        pacmanMovingImages[i][index].src = element.replace("direction",e);
      } );
@@ -627,8 +627,8 @@ var BLINKY = (function () {
     new Image() ]; // down
 
   var loadGhostImages = function () {
-    ['/home/anubhav/ghosts/red/left.svg','/home/anubhav/ghosts/red/right.svg',
-    '/home/anubhav/ghosts/red/up.svg','/home/anubhav/ghosts/red/down.svg'].forEach( function (e,i) {
+    ['./img/ghosts/red/left.svg','./img/ghosts/red/right.svg',
+    './img/ghosts/red/up.svg','./img/ghosts/red/down.svg'].forEach( function (e,i) {
       ghostImages[i].src = e;
     });
   };
@@ -752,8 +752,8 @@ var PINKY = (function () {
     new Image() ]; // down
 
   var loadGhostImages = function () {
-    ['/home/anubhav/ghosts/pink/left.svg','/home/anubhav/ghosts/pink/right.svg',
-    '/home/anubhav/ghosts/pink/up.svg','/home/anubhav/ghosts/pink/down.svg'].forEach( function (e,i) {
+    ['./img/ghosts/pink/left.svg','./img/ghosts/pink/right.svg',
+    './img/ghosts/pink/up.svg','./img/ghosts/pink/down.svg'].forEach( function (e,i) {
       ghostImages[i].src = e;
     });
   };
@@ -879,8 +879,8 @@ var INKY = (function () {
     new Image() ]; // down
 
   var loadGhostImages = function () {
-    ['/home/anubhav/ghosts/blue/left.svg','/home/anubhav/ghosts/blue/right.svg',
-    '/home/anubhav/ghosts/blue/up.svg','/home/anubhav/ghosts/blue/down.svg'].forEach( function (e,i) {
+    ['./img/ghosts/blue/left.svg','./img/ghosts/blue/right.svg',
+    './img/ghosts/blue/up.svg','./img/ghosts/blue/down.svg'].forEach( function (e,i) {
       ghostImages[i].src = e;
     });
   };
@@ -1013,8 +1013,8 @@ var CLYDE= (function () {
     new Image() ]; // down
 
   var loadGhostImages = function () {
-    ['/home/anubhav/ghosts/yellow/left.svg','/home/anubhav/ghosts/yellow/right.svg',
-    '/home/anubhav/ghosts/yellow/up.svg','/home/anubhav/ghosts/yellow/down.svg'].forEach( function (e,i) {
+    ['./img/ghosts/yellow/left.svg','./img/ghosts/yellow/right.svg',
+    './img/ghosts/yellow/up.svg','./img/ghosts/yellow/down.svg'].forEach( function (e,i) {
       ghostImages[i].src = e;
     });
   };
